@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <% if not @reports.blank? %>
+      <% @reports.each do |r| %>
+      <div class="panel panel-default">
+        <div class="panel-heading"><img src="http://placehold.it/50x50"> <%= r.user.email %></div>
+        <div class="panel-body">
+          <% JSON.parse(r.description).each do |k,v| %>
+            <% if v.present? %>
+            <div class="task">
+              <div class="task-title"><%= report_messages[k.to_i] %>:</div>
+              <ul>
+                <% v.each do |message| %>
+                  <li class=""><%= message %> </li>
+                <% end %>
+              </ul>
+            </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+      <% end %>
+    <% end %>
+  </body>
+</html>

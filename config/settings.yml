@@ -1,0 +1,12 @@
+app:
+  host: 'localhost'
+  port: 3000
+mailer:
+  from:                 'store1@example.com'
+  address:              smtp.gmail.com
+  domain:               localhost
+  user_name:            'mail@kirillivanov.ru'
+  password:             'd0m3n-dxkxzx'
+  authentication:       'plain'
+  openssl_verify_mode:  'none'
+  enable_starttls_auto: true

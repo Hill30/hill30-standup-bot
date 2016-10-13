@@ -16,6 +16,10 @@ class Slackbot::Workflow
   -s start daily report
   -n next report statement'
 
+  TIMESHEET_MESSAGE = '
+   -send send timesheet
+   -skip skip report
+  '
 
   def self.getRegisteredUser(context)
     if context[:user][:registered]
@@ -104,5 +108,41 @@ class Slackbot::Workflow
     end
   end
 
+ 
+  def self.doSkipTimesheet(context)
+    return unless self.getRegisteredUser(context)
+    userData = context[:webClient].users_info(user: context[:data].user)
+    email = userData['user']['profile']['email']
+    user =  User.find_by(email: email)
+
+    if result = user.timesheets.create!({ description: nil, send_timesheet_remider: false})
+      Slackbot::Message.send(context, "You skip report successfully.")
+    else
+      Slackbot::Message.send(context, "Can't save a user to DB.")
+    end 
+  end
+
+  def self.doStartTimesheet(context)
+    user = context[:user]
+    Slackbot::Message.send(context, "Write and send timesheet.")
+    user[:ready_to_send_timesheet] = true
+  end
+
+  def self.sendTimesheet(context)
+    return unless self.getRegisteredUser(context)
+    userData = context[:webClient].users_info(user: context[:data].user)
+    email = userData['user']['profile']['email']
+    user =  User.find_by(email: email)
+
+    if result = user.timesheets.create!({ description: context[:data].text, send_timesheet_remider: true})
+      Slackbot::Message.send(context, "You send timesheet successfully.")
+    else
+      Slackbot::Message.send(context, "Can't save a timesheet to DB.")
+    end
+
+    user = context[:user]    
+    user[:ready_to_send_timesheet] = false
+
+  end
 
 end

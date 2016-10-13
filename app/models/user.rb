@@ -5,7 +5,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :daily_reports
-
+  has_many :timesheets
+  
   scope :without_daily_report, -> {
     includes(:daily_reports)
     .where(users: { enabled: true })

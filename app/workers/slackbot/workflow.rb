@@ -16,10 +16,9 @@ class Slackbot::Workflow
   -s start daily report
   -n next report statement'
 
-  TIMESHEET_MESSAGE = '
-   -send send timesheet
-   -skip skip report
-  '
+  TIMESHEET_MESSAGE = 'Please, type -send to write timesheet. (Or -skip if you don\'t work)'
+
+
 
   def self.getRegisteredUser(context)
     if context[:user][:registered]

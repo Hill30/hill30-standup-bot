@@ -23,25 +23,25 @@ default: &default
 
 development:
   <<: *default
-  database: hill30_stadup_bot
+  database: dbsfoga9pk8qo0
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
   # the same name as the operating system user that initialized the database.
-  #username: ghenghis
+  username: ENV["POSTGRES_USERNAME"]
 
   # The password associated with the postgres role (username).
-  #password:
+  password: ENV["POSTGRES_PASSWORD"]
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
   # domain sockets, so uncomment these lines.
-  #host: localhost
+  host: ec2-50-17-237-148.compute-1.amazonaws.com
 
   # The TCP port the server listens on. Defaults to 5432.
   # If your server runs on a different port number, change accordingly.
-  #port: 5432
+  port: 5432
 
   # Schema search path. The server defaults to $user,public
   #schema_search_path: myapp,sharedapp,public
@@ -83,8 +83,8 @@ test:
 
 #production:
 #  <<: *default
-#  database: ghenghis
-#  username: ghenghis
-#  password: <%= ENV['GHENGHIS_DATABASE_PASSWORD'] %>
-#  host: 10.101.2.150
+#  database: xx
+#  username: xxx
+#  password: xxx
+#  host: xxx
 #  pool: 25

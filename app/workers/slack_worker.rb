@@ -28,14 +28,24 @@ class SlackWorker
         p "ping #{ Time.now }"
       end
 
-      scheduler.cron '00 13 14 15 * * 4-6' do
+      scheduler.cron '00 13,14,15 * * 4-6' do
         email = ['kkataev@hill30.com', 'kivanov@hill30.com', 'ishamatov@hill30.com', 'ikirichenko@hill30.com', 'kdobretsov@hill30.com', 'npakudin@hill30.com', 'ykononov@hill30.com']
         User.where(email: email).each do |u|
           unless u.timesheets.where(created_at: Date.today.at_beginning_of_week..Date.today.end_of_day).exists?
             channel = webClient.users_info(user:"@#{u.email.split("@")[0]}")['user']['id']
-            webClient.chat_postMessage(channel: channel, text: "Time to fill your weekly timesheet! Please do it ASAP until Friday evening! Answer on it message. #{ Slackbot::Workflow::TIMESHEET_MESSAGE }", as_user: true)
+            webClient.chat_postMessage(channel: channel, text: "Time to fill your weekly timesheet! Please do it ASAP until Friday evening! #{ Slackbot::Workflow::TIMESHEET_MESSAGE }", as_user: true)
           end
         end
+      end
+
+      scheduler.cron '00 18 * * 5-5' do
+        timesheets = ''        
+        Timesheet.joins(:user).where(created_at: Date.today.at_beginning_of_week..Date.today.end_of_day).each do |t|
+          p t
+          timesheets += ' ' + t.user.email + ':' + t.description
+        end
+        channel = webClient.users_info(user:"@kivanov")['user']['id']
+        webClient.chat_postMessage(channel: channel, text: timesheets, as_user: true)
       end
 
       #scheduler.cron '00 20 * * 6-6' do

@@ -1,5 +1,5 @@
 Slack.configure do |config|
-  config.token = 'xoxb-75680063014-q1JPbigyGoRHyASQjP6vhDiR'
+  config.token = ENV["SLACK_API_TOKEN"]
   fail 'Missing ENV[SLACK_API_TOKEN]!' unless config.token
 
   Slack::RealTime.configure do |config|
